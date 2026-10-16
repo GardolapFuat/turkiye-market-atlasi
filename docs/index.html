@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173b43">
+  <title>Türkiye Market Atlası</title>
+  <meta name="description" content="Türkiye genelinde A101, BİM, ŞOK ve Migros mağazalarını kaynaklı pinlerle keşfet.">
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="vendor/MarkerCluster.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside id="sidebar">
+    <header><span class="eyebrow">81 İL · 7 BÖLGE</span><h1>Türkiye Market Atlası<span class="title-dot">●</span></h1><p>Yerleşimleri market pinleriyle keşfet.</p></header>
+    <div class="filter-area">
+      <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Köy, belde, ilçe veya mağaza ara" aria-label="Yerleşim veya mağaza ara"></label>
+      <div class="select-row"><label>Bölge<select id="region"><option value="">Tüm Türkiye</option><option>Marmara</option><option>Ege</option><option>Akdeniz</option><option>İç Anadolu</option><option>Karadeniz</option><option>Doğu Anadolu</option><option>Güneydoğu Anadolu</option></select></label><label>İl<select id="province"><option value="">Tüm iller</option></select></label></div>
+      <div class="label-row"><span>MARKALAR</span><button id="brands-all" class="text-button">Tümünü seç</button></div>
+      <div class="brands" id="brands"></div>
+      <p class="coverage-note">Kapsam eksik olabilir. Pin görünmemesi, mağaza olmadığı anlamına gelmez.</p>
+      <details class="options"><summary>Yerleşim ve kaynak seçenekleri</summary><label class="check"><input id="small" type="checkbox"> Köy / kasaba kayıtlarına yakın noktalar</label><small id="small-help">OSM köy ve kasaba merkezlerinin 2 km çevresi; resmî kırsal sınıflandırma değildir.</small><label class="check"><input id="official" type="checkbox"> Yalnızca resmî koordinat kaynağı</label></details>
+      <div class="result-summary"><strong id="total" aria-live="polite">Veri yükleniyor…</strong><span id="visible"></span></div>
+    </div>
+    <section class="result-area"><div class="result-heading"><h2>Haritadaki mağazalar</h2><span>Bir kayda tıkla, pine git</span></div><div id="results"></div></section>
+    <footer><button id="about-button" class="text-button">Kaynaklar ve kapsam</button><a id="repo-link" class="text-button" hidden target="_blank" rel="noopener">GitHub</a><span id="date"></span></footer>
+  </aside>
+  <main id="map-area"><div id="map" aria-label="Zincir market pin haritası"></div><div class="map-top"><button id="sidebar-toggle" aria-label="Filtreleri göster">☰ Filtreler</button><span class="map-tip">Yakınlaştır · Pinlere tıkla · Çevreyi keşfet</span></div><div class="map-bottom"><button id="fit">Filtrelenen pinlere git</button><button id="satellite">Harita / uydu</button><button id="share">Görünümü paylaş</button></div><div id="map-error" hidden role="alert"></div></main>
+  <dialog id="about"><button id="close-about" aria-label="Kapat">×</button><span class="eyebrow">KAYNAK VE KAPSAM</span><h2>Bu pinler nereden geliyor?</h2><div id="about-copy"></div><p>Koordinatlar kaynak kayıtlardan alınır. Adresten tahminî koordinat üretilmez. OSM bina/alan kayıtları haritada kaynak geometrisinin merkeziyle gösterilir ve pin kartında belirtilir.</p><p>Mağaza varlığı tek başına gelişim, imar veya gayrimenkul değer artışı göstergesi değildir. Bu atlas yerleşim keşfine başlangıç içindir.</p><p><a href="data.json" download>Kaynaklı konum verisini indir (JSON)</a> · <a href="markets.csv" download>Tablo olarak indir (CSV)</a> · <a id="report-link" hidden target="_blank" rel="noopener">Eksik mağaza bildir</a></p></dialog>
+  <script src="vendor/leaflet.js"></script><script src="vendor/leaflet.markercluster.js"></script><script src="data.js"></script><script src="app.js"></script>
+</body></html>

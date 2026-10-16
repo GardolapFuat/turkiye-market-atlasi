@@ -1,0 +1,16 @@
+[
+  {
+    "id": "checked-karabiga-a101-mehmetbey-20261017",
+    "brand": "A101",
+    "name": "A101 Karabiga · Mehmetbey Caddesi",
+    "lat": 40.4036585,
+    "lon": 27.3031762,
+    "address": "Yalı Mah. Mehmetbey Cad. No:35 D:1, Karabiga",
+    "district": "Biga",
+    "source": "Google Maps işletme kaydı · tekil kontrol",
+    "source_url": "https://www.google.com/maps/place/A.101/data=!4m2!3m1!1s0x14b6a9b769ddfbdd:0x99704b71e59204e7",
+    "coordinate_type": "source_record",
+    "checked_at": "2026-10-17",
+    "note": "Kullanıcı örneği üzerine işletme kartı, adres ve !3d/!4d koordinatı doğrudan kontrol edildi. Harita merkezi veya yerleşim merkezi kullanılmadı."
+  }
+]

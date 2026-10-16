@@ -1,0 +1,24 @@
+name: Eksik veya hatalı mağaza
+description: Kaynak bağlantısıyla eksik veya yanlış bir konumu bildirin.
+title: "[Konum] "
+body:
+  - type: input
+    id: location
+    attributes:
+      label: İl / ilçe / yerleşim
+    validations:
+      required: true
+  - type: dropdown
+    id: brand
+    attributes:
+      label: Marka
+      options: [A101, BİM, ŞOK, Migros]
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Açık adres ve doğrudan kaynak bağlantısı
+      description: Resmî mağaza veya işletme kaydı bağlantısı; varsa kaynak koordinatı ve kontrol tarihi.
+    validations:
+      required: true

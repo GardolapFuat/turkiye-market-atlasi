@@ -1,0 +1,11 @@
+.cache/
+__pycache__/
+*.pyc
+.env
+.env.*
+.openai/
+node_modules/
+.DS_Store
+Thumbs.db
+*.tar.gz
+*.zip
