@@ -2,7 +2,7 @@
 
 Türkiye genelinde **A101, BİM, ŞOK ve Migros/MJet** mağazalarını gezilebilir pinlerle inceleyen, tarayıcıda çalışan bir harita. Özellikle küçük yerleşimleri keşfetmek için marka, il, bölge ve yerleşim yakınlığı filtreleri sunar.
 
-**[Haritayı aç](https://kirsal-market-haritasi-17ekim.pastel-snow-6219.chatgpt.site)** · [Kaynaklar ve veri sınırları](DATA_SOURCES.md) · [Eksik mağaza bildir](https://github.com/GardolapFuat/turkiye-market-atlasi/issues/new?template=missing-store.yml)
+**[Haritayı aç](https://gardolapfuat.github.io/turkiye-market-atlasi/)** · [Kaynaklar ve veri sınırları](DATA_SOURCES.md) · [Eksik mağaza bildir](https://github.com/GardolapFuat/turkiye-market-atlasi/issues/new?template=missing-store.yml)
 
 ## Kapsam
 
