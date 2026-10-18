@@ -1988,5 +1988,92 @@
         "license": "CC BY 4.0; GeoNames"
       }
     ]
+  },
+  "six_province_directory": {
+    "checked_at": "2026-10-18",
+    "provinces": [
+      "Balıkesir",
+      "Çanakkale",
+      "İzmir",
+      "Muğla",
+      "Aydın",
+      "Bursa"
+    ],
+    "source": "https://enyakinsubesi.com",
+    "pages": [
+      {
+        "url": "https://enyakinsubesi.com/a101/balikesir",
+        "records": 248,
+        "excluded": 0,
+        "sha256": "0983f98bea41316ea1cf03b8e43f5ca5b2afe2e64e695aea2206dfc37faced95"
+      },
+      {
+        "url": "https://enyakinsubesi.com/bim/balikesir",
+        "records": 176,
+        "excluded": 37,
+        "sha256": "c44a1121ba6b76ec6f634f14c16468a7e90cad895110c7dae48b546e6844cbcb"
+      },
+      {
+        "url": "https://enyakinsubesi.com/a101/canakkale",
+        "records": 116,
+        "excluded": 0,
+        "sha256": "bc2f8f9986510fa087e73496d28bcedee555a17856faa2874e0425c5ffdfef7d"
+      },
+      {
+        "url": "https://enyakinsubesi.com/bim/canakkale",
+        "records": 43,
+        "excluded": 51,
+        "sha256": "aef55831631c58c8a93ecfb5e2cbd4abd43dbdf0a4e0498798c4eda78af37b02"
+      },
+      {
+        "url": "https://enyakinsubesi.com/a101/izmir",
+        "records": 835,
+        "excluded": 0,
+        "sha256": "ba833b0238d368d0e3c1f5b95690b3352ec541aabbac9fdae02a0de320d673f2"
+      },
+      {
+        "url": "https://enyakinsubesi.com/bim/izmir",
+        "records": 573,
+        "excluded": 111,
+        "sha256": "339ffc10b1e97ad6757a17ac6650093a4d7f120e2373122a3c06bb6b14d20a2c"
+      },
+      {
+        "url": "https://enyakinsubesi.com/a101/mugla",
+        "records": 268,
+        "excluded": 0,
+        "sha256": "8d1c521ecd3d4cf6d31b2b54dd4099191574efae3d1d759838c39cacd7030bdc"
+      },
+      {
+        "url": "https://enyakinsubesi.com/bim/mugla",
+        "records": 123,
+        "excluded": 89,
+        "sha256": "1ac7ad17ecd10145d744ae55a61774752d737fbc5b9af951c13d0cfcc112bd8c"
+      },
+      {
+        "url": "https://enyakinsubesi.com/a101/aydin",
+        "records": 223,
+        "excluded": 0,
+        "sha256": "efd7d07b586ac82b8befef118223f4d7e501862c2b546f0781649db9a433701c"
+      },
+      {
+        "url": "https://enyakinsubesi.com/bim/aydin",
+        "records": 141,
+        "excluded": 35,
+        "sha256": "6570e415a893c70c5200d2cbbbb76d0b86fe6a6eefb64715e10099d6149feb50"
+      },
+      {
+        "url": "https://enyakinsubesi.com/a101/bursa",
+        "records": 490,
+        "excluded": 0,
+        "sha256": "4c4dc50cf771e46e4bea7688ad83b2dc254206c51e56c8bd503b43a719e25d4b"
+      },
+      {
+        "url": "https://enyakinsubesi.com/bim/bursa",
+        "records": 353,
+        "excluded": 168,
+        "sha256": "e187fb77a6f6ce67f915d77f8f833064980757d501a53ee9240bc80f2fc2895b"
+      }
+    ],
+    "note": "Third-party directory, not direct official retrieval or Google Places data. Completeness and current operation are not guaranteed."
   }
 }

@@ -49,6 +49,31 @@ def build(cache,output,repo_url=''):
         if not s.get('source_url','').startswith('https://') or not s.get('checked_at'):raise ValueError('Correction needs a checked source: '+s['id'])
         if any(n['brand']==s['brand'] and distance(n,s)<.04 for n in stores):continue
         stores.append(s|p)
+    # Enrich only the six requested provinces. Existing source coordinates win.
+    focus=read(ROOT/'data/focus-source-snapshot.json') if (ROOT/'data/focus-source-snapshot.json').exists() else {'stores':[],'metadata':{'provinces':[]}}
+    before=Counter((s['province'],s['brand']) for s in stores)
+    focusgrid=defaultdict(list);focus_review=[];focus_merged=[];focus_added=[]
+    for s in stores:focusgrid[(s['brand'],math.floor(s['lon']*100),math.floor(s['lat']*100))].append(s)
+    for s in focus['stores']:
+        p=lookup(s)
+        if not p or p['province']!=s['expected_province']:
+            focus_review.append({'id':s['id'],'source_url':s['source_url'],'reason':'province_polygon_mismatch'});continue
+        gx,gy=math.floor(s['lon']*100),math.floor(s['lat']*100)
+        nearby=[n for x in range(gx-1,gx+2) for y in range(gy-1,gy+2) for n in focusgrid[(s['brand'],x,y)]]
+        match=min(nearby,key=lambda n:distance(s,n)) if nearby else None
+        d=distance(s,match) if match else float('inf')
+        if d<.070:
+            match.setdefault('additional_sources',[]).append(s['source_url'])
+            focus_merged.append({'id':s['id'],'matched_id':match['id'],'distance_m':round(d*1000,1),'source_url':s['source_url']});continue
+        if d<.180:
+            focus_review.append({'id':s['id'],'source_url':s['source_url'],'reason':'possible_duplicate_70_to_180m','nearby_id':match['id'],'distance_m':round(d*1000,1)});continue
+        n={k:v for k,v in s.items() if k!='expected_province'}|p
+        if s['source_url']=='https://enyakinsubesi.com/a101/mugla/selimiye':
+            n['note']='Kaynak adresi Milas Söke Yolu No:1; kullanıcının Google Maps örneğinde Atatürk Bulvarı No:62-A yazıyor. Kaynak konumları yaklaşık 15 m yakın; adres farkı bağımsız olarak çözümlenmedi.'
+        stores.append(n);focus_added.append(n['id']);focusgrid[(s['brand'],gx,gy)].append(n)
+    after=Counter((s['province'],s['brand']) for s in stores)
+    focus_summary=[{'province':p,'brand':b,'before':before[(p,b)],'after':after[(p,b)],'added':after[(p,b)]-before[(p,b)]} for p in focus['metadata']['provinces'] for b in ('A101','BİM')]
+    write(ROOT/'data/focus-report.json',{'checked_at':focus['metadata'].get('checked_at'),'source_records':len(focus['stores']),'added_count':len(focus_added),'merged_count':len(focus_merged),'review_count':len(focus_review),'source_missing_fields':len(focus.get('excluded',[])),'summary':focus_summary,'added_ids':focus_added,'merged':focus_merged,'review':focus_review})
     places=read(cache/'osm/places-normalized.json')['places'];placegrid=defaultdict(list)
     for p in places:
         loc=lookup(p)
@@ -70,7 +95,8 @@ def build(cache,output,repo_url=''):
     assert set(s['brand'] for s in stores)=={'A101','BİM','ŞOK','Migros'}
     date=datetime.now(timezone(timedelta(hours=3))).strftime('%d.%m.%Y')
     meta={'retrieved_at':date,'brands':dict(Counter(s['brand'] for s in stores)),'sources':dict(Counter(s['source'] for s in stores)),'coordinate_types':dict(Counter(s['coordinate_type'] for s in stores)),'province_count':len({s['province_code'] for s in stores}),'has_localities':True,'small_locality_store_count':sum(bool(s.get('locality')) for s in stores),'repo_url':repo_url,
-          'coverage_note':'Bu harita tam şube envanteri değildir. A101 için kısmi resmî veri ile OpenStreetMap, BİM için OpenStreetMap kullanılır; kapsam eksiktir. ŞOK ve Migros koordinatları resmî mağaza bulucularından alınır. Pin olmaması mağaza olmadığı anlamına gelmez. Kaynaklarda eski, taşınmış veya hatalı konumlar bulunabilir; tüm şubeler sahada doğrulanmış sayılmaz.',
+          'focus_provinces':focus['metadata']['provinces'],'focus_enrichment':{'checked_at':focus['metadata'].get('checked_at'),'added_count':len(focus_added),'merged_count':len(focus_merged),'review_count':len(focus_review)},
+          'coverage_note':'Bu harita tam şube envanteri değildir. Balıkesir, Çanakkale, İzmir, Muğla, Aydın ve Bursa için A101/BİM kapsamı ek bir işletme diziniyle genişletildi. Bu kayıtlar doğrudan resmî veri veya Google Places verisi değildir; kartlarında ek dizin kaydı olarak belirtilir. Diğer illerde önceki veriler korunur. Koordinatsız ve konumu çelişkili ek kayıtlar pine dönüştürülmez. ŞOK ve Migros koordinatları resmî mağaza bulucularından alınır. Pin olmaması mağaza olmadığı anlamına gelmez; tüm şubeler sahada doğrulanmış sayılmaz.',
           'licenses':{'OpenStreetMap':'ODbL 1.0 © OpenStreetMap contributors','province_boundaries':'OSM-derived, ODbL; theaiagent/turkiye_iller_geojson / cihadturhan/tr-geojson','nearby_place_names':'GeoNames CC BY 4.0'},
           'osm_source':osm.get('metadata',{})}
     payload={'metadata':meta,'stores':stores};output.mkdir(parents=True,exist_ok=True)
@@ -79,6 +105,19 @@ def build(cache,output,repo_url=''):
     with (output/'markets.csv').open('w',encoding='utf-8-sig',newline='') as f:
         fields=['brand','name','province','province_code','district','region','lat','lon','address','source','source_url','coordinate_type','nearby_place']
         w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore');w.writeheader();w.writerows(stores)
+    focus_stores=[s for s in stores if s['province'] in focus['metadata']['provinces']]
+    with (output/'focus-markets.csv').open('w',encoding='utf-8-sig',newline='') as f:
+        w=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore');w.writeheader();w.writerows(focus_stores)
+    locality_groups=defaultdict(list)
+    for s in focus_stores:
+        if s.get('locality'):locality_groups[(s['province'],s['locality']['source_url'])].append(s)
+    with (output/'focus-localities.csv').open('w',encoding='utf-8-sig',newline='') as f:
+        fields=['province','locality','osm_place_type','store_count','brands','a101','bim','sok','migros','directory_records','locality_source_url','atlas_url']
+        w=csv.DictWriter(f,fieldnames=fields);w.writeheader()
+        from urllib.parse import urlencode
+        for (province,url),rows in sorted(locality_groups.items()):
+            place=rows[0]['locality'];counts=Counter(s['brand'] for s in rows)
+            w.writerow({'province':province,'locality':place['name'],'osm_place_type':place['type'],'store_count':len(rows),'brands':' | '.join(sorted(counts)),'a101':counts['A101'],'bim':counts['BİM'],'sok':counts['ŞOK'],'migros':counts['Migros'],'directory_records':sum(s['coordinate_type']=='directory' for s in rows),'locality_source_url':url,'atlas_url':'https://gardolapfuat.github.io/turkiye-market-atlasi/#'+urlencode({'region':'focus','province':province,'q':place['name'],'small':'1'})})
     write(ROOT/'data/build-report.json',{'metadata':meta,'excluded_count':len(excluded),'excluded':excluded})
     print(json.dumps({'stores':len(stores),'brands':meta['brands'],'provinces':meta['province_count'],'regions':dict(Counter(s['region'] for s in stores)),'excluded':len(excluded)},ensure_ascii=True))
     return payload
